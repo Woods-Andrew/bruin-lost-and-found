@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#e8eef5"/>
+  <rect x="250" y="60" width="140" height="280" rx="28" fill="#111"/>
+  <rect x="262" y="78" width="116" height="244" rx="18" fill="#2774ae"/>
+  <rect x="262" y="78" width="116" height="80" fill="#ffd100"/>
+  <text x="320" y="400" text-anchor="middle" font-family="Arial" font-size="22" fill="#003b5c">Bruins phone case</text>
+</svg>

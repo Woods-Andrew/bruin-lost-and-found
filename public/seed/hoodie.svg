@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#f3e6e6"/>
+  <path d="M180 160l70-40 70 24 70-24 70 40-30 40v140H210V200z" fill="#7b2d3b"/>
+  <circle cx="320" cy="150" r="36" fill="#5c1f2b"/>
+  <text x="320" y="260" text-anchor="middle" font-family="Arial" font-size="28" fill="#ffd100">UCLA</text>
+  <text x="320" y="430" text-anchor="middle" font-family="Arial" font-size="22" fill="#003b5c">Maroon hoodie</text>
+</svg>

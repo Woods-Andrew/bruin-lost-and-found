@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#d7e8f5"/>
+  <rect x="210" y="90" width="220" height="280" rx="28" fill="#1e3a5f"/>
+  <rect x="230" y="120" width="180" height="90" rx="16" fill="#2774ae"/>
+  <circle cx="320" cy="230" r="14" fill="#ffd100"/>
+  <rect x="250" y="250" width="140" height="80" rx="12" fill="#12344d"/>
+  <text x="320" y="430" text-anchor="middle" font-family="Arial" font-size="22" fill="#003b5c">Navy backpack</text>
+</svg>
