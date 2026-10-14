@@ -1,4 +1,6 @@
 import { cacheKey, readCache, writeCache } from "@/lib/ai/cache";
+import { type DemoKitItem } from "@/lib/demo/kit";
+import { matchDemoPhoto } from "@/lib/demo/kit-match";
 import { runWithRetry } from "@/lib/jobs/queue";
 import { config, visionConfigured } from "@/lib/config";
 import { logError } from "@/lib/log";
@@ -25,6 +27,17 @@ function mockVision(): VisionResult {
     attributes: emptyAttributes(),
     source: "mock",
     note: MOCK_NOTE,
+  };
+}
+
+function mockVisionForDemoPhoto(item: DemoKitItem): VisionResult {
+  return {
+    title: item.title,
+    description: item.description,
+    attributes: item.attributes,
+    location: item.location,
+    source: "mock",
+    note: "Mock vision for a bundled demo photo (no Qwen endpoint). This is not real model inference — review or edit before publishing.",
   };
 }
 
@@ -90,8 +103,19 @@ async function callVision(imageBase64: string, mimeType: string): Promise<Vision
   };
 }
 
-export async function analyzePhoto(imageBase64: string, mimeType: string) {
+export async function analyzePhoto(
+  imageBase64: string,
+  mimeType: string,
+  filename?: string,
+) {
   const key = cacheKey("vision", `${mimeType}:${imageBase64}`);
+  const demoItem = await matchDemoPhoto(Buffer.from(imageBase64, "base64"), filename);
+  if (demoItem && !visionConfigured()) {
+    const result = mockVisionForDemoPhoto(demoItem);
+    await writeCache(key, "vision", result);
+    return result;
+  }
+
   const cached = await readCache<VisionResult>(key);
   if (cached) return { ...cached, note: `${cached.note} (cached)` };
 

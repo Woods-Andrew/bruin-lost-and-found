@@ -17,10 +17,9 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000).
 
 1. Sign in as **Demo student** (`bruin@ucla.edu`) or any `@ucla.edu` address.
-2. Open **Upload** and click a **live demo kit** photo (lime Jansport, red Switch case, or CS 31 pencil case). Photos are also in `public/demo/`.
-3. Click **Generate description**. The amber note is mock vision, not real Qwen inference.
-4. Click **Replace mock text with demo listing copy**, then **Publish listing**.
-5. Search is prefilled. Click **Find matches** — the item you just published should rank first.
+2. Open **Upload** and click a **live demo kit** photo (or pick the same file from `public/demo/`).
+3. Click **Generate description**. For kit photos this fills a labeled mock listing; it is not real Qwen inference. Edit anything you want, then **Publish listing**.
+4. On the item page, type your own description (for example `green backpack with a rubber duck`) and search. The item you published should rank first.
 6. Open a match and submit a claim with identifying details.
 7. Sign out, sign in as **Demo staff** (`staff@ucla.edu`), open **Admin**, and approve pickup.
 8. Sign back in as the student to see the in-app alert.

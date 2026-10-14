@@ -1,15 +1,19 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AiBadge } from "@/components/item-card";
+import { OwnWordsSearch } from "@/app/items/[id]/own-words-search";
 import { getStore } from "@/lib/store";
 import { getSession } from "@/lib/session";
 
 export default async function ItemPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ next?: string }>;
 }) {
   const { id } = await params;
+  const { next } = await searchParams;
   const item = await getStore().getItem(id);
   if (!item) notFound();
   const user = await getSession();
@@ -38,6 +42,11 @@ export default async function ItemPage({
             </div>
           ))}
         </dl>
+        {next === "search" || item.status === "published" ? (
+          <OwnWordsSearch
+            placeholder={`green backpack with a rubber duck, ${item.title.toLowerCase()}, …`}
+          />
+        ) : null}
         {user && item.status === "published" ? (
           <Link
             className="inline-flex rounded-full bg-ucla-gold px-5 py-2 font-semibold text-ucla-dark"

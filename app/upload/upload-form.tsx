@@ -27,13 +27,6 @@ export function UploadForm({ defaultKind }: { defaultKind: ItemKind }) {
   const [error, setError] = useState("");
   const [pending, setPending] = useState<"analyze" | "publish" | "">("");
 
-  function applyKitCopy(item: DemoKitItem) {
-    setTitle(item.title);
-    setDescription(item.description);
-    setLocation(item.location);
-    setAttributes(item.attributes);
-  }
-
   async function chooseKit(item: DemoKitItem) {
     const response = await fetch(item.photoUrl);
     const blob = await response.blob();
@@ -68,6 +61,7 @@ export function UploadForm({ defaultKind }: { defaultKind: ItemKind }) {
     setVision(body);
     setTitle(body.title);
     setDescription(body.description);
+    setLocation(body.location || location || kitItem?.location || "");
     setAttributes(body.attributes);
   }
 
@@ -92,11 +86,7 @@ export function UploadForm({ defaultKind }: { defaultKind: ItemKind }) {
       setError(body.error || "Publish failed");
       return;
     }
-    if (kitItem) {
-      router.push(`/search?q=${encodeURIComponent(kitItem.searchQuery)}`);
-    } else {
-      router.push(`/items/${body.item.id}`);
-    }
+    router.push(`/items/${body.item.id}?next=search`);
     router.refresh();
   }
 
@@ -107,10 +97,12 @@ export function UploadForm({ defaultKind }: { defaultKind: ItemKind }) {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ucla-blue">
             Live demo kit
           </p>
-          <h2 className="mt-1 text-xl font-semibold text-ucla-dark">Pick a photo, then search for it</h2>
+          <h2 className="mt-1 text-xl font-semibold text-ucla-dark">
+            Upload a photo, generate a description, then search in your own words
+          </h2>
           <p className="mt-1 text-sm text-slate-600">
-            Click a photo to load it. Generate the labeled mock description, apply the demo copy,
-            publish, then search with the matching query.
+            Click a photo or use your file picker. Generate description fills the listing. After you
+            publish, type how you would describe the item on Search.
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
@@ -179,18 +171,9 @@ export function UploadForm({ defaultKind }: { defaultKind: ItemKind }) {
             </p>
           ) : (
             <p className="text-sm text-slate-600">
-              Run analysis, then edit every field. Mock output is never shown as live inference.
+              Generate a description from the photo, then edit anything that looks wrong.
             </p>
           )}
-          {kitItem && vision ? (
-            <button
-              type="button"
-              className="rounded-full border border-ucla-blue px-4 py-2 text-sm font-semibold text-ucla-blue"
-              onClick={() => applyKitCopy(kitItem)}
-            >
-              Replace mock text with demo listing copy
-            </button>
-          ) : null}
           <label className="block text-sm font-medium">
             Title
             <input className="mt-1 w-full rounded-xl border px-3 py-2" value={title} onChange={(e) => setTitle(e.target.value)} />

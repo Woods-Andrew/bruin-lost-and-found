@@ -78,6 +78,7 @@ export type VisionResult = {
   title: string;
   description: string;
   attributes: ItemAttributes;
+  location?: string;
   source: AiSource;
   note: string;
 };

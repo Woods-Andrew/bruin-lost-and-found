@@ -39,8 +39,8 @@ export default function Home() {
             <p className="text-ucla-gold">Campus demo flow</p>
             <ol className="mt-3 space-y-2 text-sm leading-6">
               <li>1. Sign in with a university email</li>
-              <li>2. Upload a found item and edit the AI description</li>
-              <li>3. Search in plain language</li>
+              <li>2. Upload a photo and generate an AI description</li>
+              <li>3. Search by typing your own description</li>
               <li>4. Submit a claim with identifying details</li>
               <li>5. Staff approves pickup</li>
             </ol>
@@ -52,10 +52,10 @@ export default function Home() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ucla-blue">
             Photos for the live demo
           </p>
-          <h2 className="mt-1 text-2xl font-semibold text-ucla-dark">Upload one of these, then search for it</h2>
+          <h2 className="mt-1 text-2xl font-semibold text-ucla-dark">Upload one of these, then search in your own words</h2>
           <p className="mt-1 text-slate-600">
-            Sign in, open Upload, click a photo, generate the labeled mock description, apply the demo
-            copy, publish, and search. Files also live in <code>public/demo/</code>.
+            Sign in, open Upload, click a photo, generate the description, publish, then type something
+            like “green backpack with a rubber duck.” Files also live in <code>public/demo/</code>.
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-3">

@@ -2,18 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ItemCard } from "@/components/item-card";
-import { demoKit } from "@/lib/demo/kit";
 import type { SearchResponse } from "@/lib/types";
 
-const sampleQueries = [
-  "navy north face backpack with a UCLA keychain",
-  ...demoKit.map((item) => item.searchQuery),
-];
-
 export function SearchForm({ defaultQuery }: { defaultQuery?: string }) {
-  const [query, setQuery] = useState(
-    defaultQuery || "navy north face backpack with a UCLA keychain",
-  );
+  const [query, setQuery] = useState(defaultQuery || "");
   const [watch, setWatch] = useState(true);
   const [result, setResult] = useState<SearchResponse | null>(null);
   const [error, setError] = useState("");
@@ -21,7 +13,7 @@ export function SearchForm({ defaultQuery }: { defaultQuery?: string }) {
 
   useEffect(() => {
     if (defaultQuery) void search();
-    // Prefill from a demo-kit publish.
+    // Run only when arriving from "search in your own words".
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -47,25 +39,14 @@ export function SearchForm({ defaultQuery }: { defaultQuery?: string }) {
       <div className="card p-6 space-y-4">
         <h1 className="text-3xl font-semibold text-ucla-dark">Describe your item</h1>
         <p className="text-slate-600">
-          Semantic search compares your words to stored photos and descriptions. Results say
-          whether Qwen3-VL-Embedding ran or a labeled mock embedding was used.
+          Type a description in your own words. Search compares that text to published photos and
+          listings. Results say whether Qwen3-VL-Embedding ran or a labeled mock embedding was used.
         </p>
-        <div className="flex flex-wrap gap-2">
-          {sampleQueries.map((sample) => (
-            <button
-              key={sample}
-              type="button"
-              className="rounded-full border border-ucla-blue/30 px-3 py-1 text-left text-xs text-ucla-blue hover:bg-ucla-blue/10"
-              onClick={() => setQuery(sample)}
-            >
-              {sample}
-            </button>
-          ))}
-        </div>
         <textarea
           className="w-full rounded-2xl border px-4 py-3"
           rows={4}
           value={query}
+          placeholder="green backpack with a rubber duck zipper and GO BRUINS tape"
           onChange={(event) => setQuery(event.target.value)}
         />
         <label className="flex items-center gap-2 text-sm">

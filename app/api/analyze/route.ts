@@ -17,6 +17,7 @@ export async function POST(request: Request) {
     const result = await analyzePhoto(
       buffer.toString("base64"),
       file.type || "image/jpeg",
+      file.name,
     );
     return NextResponse.json(result);
   } catch (error) {
