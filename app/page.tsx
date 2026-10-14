@@ -47,6 +47,31 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="card p-6 space-y-4">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ucla-blue">
+            Photos for the live demo
+          </p>
+          <h2 className="mt-1 text-2xl font-semibold text-ucla-dark">Upload one of these, then search for it</h2>
+          <p className="mt-1 text-slate-600">
+            Sign in, open Upload, click a photo, generate the labeled mock description, apply the demo
+            copy, publish, and search. Files also live in <code>public/demo/</code>.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            ["/demo/lime-jansport.jpg", "Lime Jansport mini backpack"],
+            ["/demo/switch-case.jpg", "Red Switch case"],
+            ["/demo/cs31-pencils.jpg", "CS 31 pencil case"],
+          ].map(([src, label]) => (
+            <Link key={src} href="/upload?kind=found" className="overflow-hidden rounded-2xl border">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt={label} className="h-40 w-full object-cover" />
+              <span className="block p-3 text-sm font-medium text-ucla-dark">{label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
       <section className="grid gap-4 md:grid-cols-3">
         {actions.map((action) => (
           <Link key={action.href} href={action.href} className="card p-6 hover:-translate-y-0.5 transition">

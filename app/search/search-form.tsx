@@ -1,15 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ItemCard } from "@/components/item-card";
+import { demoKit } from "@/lib/demo/kit";
 import type { SearchResponse } from "@/lib/types";
 
-export function SearchForm() {
-  const [query, setQuery] = useState("navy north face backpack with a UCLA keychain");
+const sampleQueries = [
+  "navy north face backpack with a UCLA keychain",
+  ...demoKit.map((item) => item.searchQuery),
+];
+
+export function SearchForm({ defaultQuery }: { defaultQuery?: string }) {
+  const [query, setQuery] = useState(
+    defaultQuery || "navy north face backpack with a UCLA keychain",
+  );
   const [watch, setWatch] = useState(true);
   const [result, setResult] = useState<SearchResponse | null>(null);
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (defaultQuery) void search();
+    // Prefill from a demo-kit publish.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function search() {
     setPending(true);
@@ -36,6 +50,18 @@ export function SearchForm() {
           Semantic search compares your words to stored photos and descriptions. Results say
           whether Qwen3-VL-Embedding ran or a labeled mock embedding was used.
         </p>
+        <div className="flex flex-wrap gap-2">
+          {sampleQueries.map((sample) => (
+            <button
+              key={sample}
+              type="button"
+              className="rounded-full border border-ucla-blue/30 px-3 py-1 text-left text-xs text-ucla-blue hover:bg-ucla-blue/10"
+              onClick={() => setQuery(sample)}
+            >
+              {sample}
+            </button>
+          ))}
+        </div>
         <textarea
           className="w-full rounded-2xl border px-4 py-3"
           rows={4}

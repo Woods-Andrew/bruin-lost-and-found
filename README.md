@@ -17,11 +17,13 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000).
 
 1. Sign in as **Demo student** (`bruin@ucla.edu`) or any `@ucla.edu` address.
-2. Upload a photo, generate a description, **edit it**, then publish.
-3. Search something like `navy north face backpack with a UCLA keychain`.
-4. Open a match and submit a claim with identifying details.
-5. Sign out, sign in as **Demo staff** (`staff@ucla.edu`), open **Admin**, and approve pickup.
-6. Sign back in as the student to see the in-app alert.
+2. Open **Upload** and click a **live demo kit** photo (lime Jansport, red Switch case, or CS 31 pencil case). Photos are also in `public/demo/`.
+3. Click **Generate description**. The amber note is mock vision, not real Qwen inference.
+4. Click **Replace mock text with demo listing copy**, then **Publish listing**.
+5. Search is prefilled. Click **Find matches** — the item you just published should rank first.
+6. Open a match and submit a claim with identifying details.
+7. Sign out, sign in as **Demo staff** (`staff@ucla.edu`), open **Admin**, and approve pickup.
+8. Sign back in as the student to see the in-app alert.
 
 The gold banner states when the database is local demo data and when vision/matching are **mock — not real Qwen inference**. Simulated AI is never labeled as live.
 
