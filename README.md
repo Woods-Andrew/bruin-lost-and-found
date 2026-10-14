@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bruin Lost and Found
 
-## Getting Started
+Campus lost-and-found demo. Students upload a photo, review an AI description, search in plain language, submit a claim, and staff approve pickup.
 
-First, run the development server:
+Matching follows [Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking](https://github.com/QwenLM/Qwen3-VL-Embedding) (January 2026): embed listings and queries with Qwen3-VL-Embedding, then optionally refine with Qwen3-VL-Reranker.
+
+## Quick start (demo mode)
+
+No Supabase or Qwen credentials required.
 
 ```bash
+cp .env.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Sign in as **Demo student** (`bruin@ucla.edu`) or any `@ucla.edu` address.
+2. Upload a photo, generate a description, **edit it**, then publish.
+3. Search something like `navy north face backpack with a UCLA keychain`.
+4. Open a match and submit a claim with identifying details.
+5. Sign out, sign in as **Demo staff** (`staff@ucla.edu`), open **Admin**, and approve pickup.
+6. Sign back in as the student to see the in-app alert.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The gold banner states when the database is local demo data and when vision/matching are **mock — not real Qwen inference**. Simulated AI is never labeled as live.
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev      # local app
+npm test         # mock embedding ranking (no paid APIs)
+npm run backup   # copy .data/store.json if you have local demo data
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See `.env.example`. Secrets stay in `.env.local` (gitignored).
 
-## Deploy on Vercel
+| Variable | Purpose |
+| --- | --- |
+| `ALLOWED_EMAIL_DOMAINS` | Comma-separated university domains. Default `ucla.edu`. |
+| `STAFF_EMAILS` | Emails granted the staff role on sign-in. |
+| `SESSION_SECRET` | Signs the demo session cookie. |
+| `NEXT_PUBLIC_SUPABASE_*` / `SUPABASE_SERVICE_ROLE_KEY` | Postgres, pgvector, Auth, Storage. Empty → labeled demo mode. |
+| `QWEN_VISION_URL` + `QWEN_API_KEY` | OpenAI-compatible VLM (`/v1/chat/completions`). |
+| `QWEN_EMBEDDING_URL` | vLLM-style `/v1/embeddings` for Qwen3-VL-Embedding. |
+| `QWEN_RERANK_URL` | Optional `/v1/rerank` for Qwen3-VL-Reranker. |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Real AI responses are cached in the store (`ai_cache`). Automated tests never call paid endpoints.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Supabase
+
+1. Create a project and enable the `vector` extension.
+2. Run `supabase/migrations/0001_init.sql` and optionally `supabase/seed.sql`.
+3. Create a public Storage bucket named `item-photos` if the insert in the migration is skipped.
+4. Enable email confirmation in Auth. Restrict sign-up to `ALLOWED_EMAIL_DOMAINS` in the app; staff permissions are enforced in API routes, not only in the UI.
+5. Use Supabase PITR / scheduled backups for the database. Local demo data can be copied with `npm run backup`.
+
+Staff APIs call `requireStaff()` on the server.
+
+## AI jobs
+
+Vision, embedding, and rerank calls go through `lib/jobs/queue.ts` with three retries. This process is in-app (good enough for the hackathon). A standalone worker is listed under remaining work.
+
+## Demo-only behavior
+
+- Local JSON store in `.data/` plus sample listings in `lib/demo/seed.ts`.
+- Immediate “verified” university email via `/api/auth/demo` instead of a magic link.
+- Mock vision returns a clearly labeled placeholder you must edit.
+- Mock embeddings are lexical hashed vectors so search still ranks related seed items.
+- Reranking is skipped until `QWEN_RERANK_URL` is set (stretch goal).
+- In-app alerts only; no email.
+
+## Remaining work
+
+- Wire Supabase magic-link login in the UI (schema and env are ready).
+- Dedicated background worker process instead of in-request retries.
+- Email notifications when matches appear.
+- Multimodal image+text embeddings (text of the reviewed description is used today).
+- Stronger claim evidence (ID photo upload) and abuse reporting.
+- Production monitoring beyond `.data/error.log` and host logs (Sentry or equivalent).
